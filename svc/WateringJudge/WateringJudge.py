@@ -4,8 +4,8 @@ from WateringJudge.TimerJudge import TimerJudge
 from WateringJudge.HumidityJudge import HumidityJudge
 
 class WateringJudge():
-    def __init__(self):
-        pass
-    
-    def hoge():
-        pass
+	def __init__(self):
+		pass
+
+	def isExecute(self):
+		return True

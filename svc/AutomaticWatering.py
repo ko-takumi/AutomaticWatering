@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from WaterMonitoring import WaterMonitoring
 from WateringJudge import WateringJudge
-from StateMemory import StateMemory
 from RegularContact import RegularContact
 from PumpControl import PumpControl
 from SwitchMonitoring import SwitchMonitoring
@@ -11,53 +10,63 @@ import time
 # 定義
 WATERING_TIME = 10
 
-if __name__ == '__main__':
-	# インスタンス化
-	#	水やり判定
-	#	水切れ判定
-	#	ポンプ操作
-	wateringJudge	= WateringJudge.WateringJudge()
-	waterMonitoring	= WaterMonitoring.WaterMonitoring()
-	pumpControl		= PumpControl.PumpControl()
+class AutomaticWatering(object):
+	mWateringJudge		= None
+	mWaterMonitoring	= None
+	mPumpControl		= None
 
-	# スレッド生成
-	#	定期連絡
-	#	スイッチ監視
-	regularContact = RegularContact.RegularContact()
-	regularContact.create()
-	regularContact.execute()
+	mRegularContact		= None
+	mSwitchMonitoring	= None
 
-	switchMonitoring = SwitchMonitoring.SwitchMonitoring()
-	switchMonitoring.create()
-	switchMonitoring.execute()
+	def __init__(self):
+		# インスタンス化
+		#	水やり判定
+		#	水切れ判定
+		#	ポンプ操作
+		self.mWateringJudge		= WateringJudge.WateringJudge()
+		self.mWaterMonitoring	= WaterMonitoring.WaterMonitoring()
+		self.mPumpControl		= PumpControl.PumpControl()
 
-	# シングルトン生成
-	StateMemory.StateMemory()
+		# スレッド生成
+		#	定期連絡
+		#	スイッチ監視
+		self.mRegularContact = RegularContact.RegularContact()
+		self.mRegularContact.create()
+		self.mRegularContact.execute()
 
-	# 異常判定は全て各クラス内で処理しているため、無視する
-	while(True):
-		# 水切れ監視
-		waterMonitoring.execute()
+		self.mSwitchMonitoring = SwitchMonitoring.SwitchMonitoring()
+		self.mSwitchMonitoring.create()
+		self.mSwitchMonitoring.execute()
 
-		# 水やり判定
-		#	水槽は異常ないか
-		#		異常の場合
-		#			処理抜け
-		#		異常ない場合
-		#			水やり不要な場合
-		#				処理抜け
-		#			水やり実施
-		isNormal = waterMonitoring.isShortfall()
-		if(isNormal == False):
-			# 水槽が異常時は以後続けない
-			continue
+		return
 
-		isJudge = wateringJudge.isExecute()
-		if(isJudge == False):
-			# 水が必要ではない
-			continue
+	def execute(self):
+		# 異常判定は全て各クラス内で処理しているため、無視する
+		while(True):
+			# 水切れ監視
+			self.mWaterMonitoring.execute()
 
-		# 水やり
-		pumpControl.execute(WATERING_TIME)
+			# 水やり判定
+			#	水槽は異常ないか
+			#		異常の場合
+			#			処理抜け
+			#		異常ない場合
+			#			水やり不要な場合
+			#				処理抜け
+			#			水やり実施
+			isNormal = self.mWaterMonitoring.isShortfall()
+			if(isNormal == False):
+				# 水槽が異常時は以後続けない
+				continue
 
-		time.sleep(10)
+			isJudge = self.mWateringJudge.isExecute()
+			if(isJudge == False):
+				# 水が必要ではない
+				continue
+
+			# 水やり
+			self.mPumpControl.execute(WATERING_TIME)
+
+			time.sleep(10)
+
+		return
