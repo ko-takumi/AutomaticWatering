@@ -31,18 +31,18 @@ class AutomaticWatering(object):
 		#	定期連絡
 		#	スイッチ監視
 		self.mRegularContact = RegularContact.RegularContact()
-		self.mRegularContact.create()
-		self.mRegularContact.execute()
+		self.mRegularContact.start()
 
 		self.mSwitchMonitoring = SwitchMonitoring.SwitchMonitoring()
-		self.mSwitchMonitoring.create()
-		self.mSwitchMonitoring.execute()
+		self.mSwitchMonitoring.start()
 
 		return
 
 	def execute(self):
 		# 異常判定は全て各クラス内で処理しているため、無視する
 		while(True):
+			print("AutomaticWatering...")
+
 			# 水切れ監視
 			self.mWaterMonitoring.execute()
 
