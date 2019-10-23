@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import threading
 from collections import deque
+import copy
 
 class Task(threading.Thread):
-	mNameSpace = deque([])
-
 	def __init__(self):
 		super(Task, self).__init__()
 
@@ -12,7 +11,9 @@ class Task(threading.Thread):
 		pass
 
 	def run(self):
+		self.mIsActive = True
+		self.mNameSpace = deque([])
 		self.taskMain()
 
 	def notifySignal(self, cmd):
-		self.mNameSpace.append(cmd)
+		self.mNameSpace.append(copy.deepcopy(cmd))

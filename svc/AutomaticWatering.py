@@ -4,6 +4,7 @@ from WateringJudge import WateringJudge
 from RegularContact import RegularContact
 from PumpControl import PumpControl
 from SwitchMonitoring import SwitchMonitoring
+from DataManagement import SwitchData
 
 import time
 
@@ -33,14 +34,17 @@ class AutomaticWatering(object):
 		self.mRegularContact = RegularContact.RegularContact()
 		self.mRegularContact.start()
 
+		# self.mSwitchMonitoring = SwitchMonitoring.getInstance()
 		self.mSwitchMonitoring = SwitchMonitoring.SwitchMonitoring()
 		self.mSwitchMonitoring.start()
-
 		return
 
 	def execute(self):
 		# 異常判定は全て各クラス内で処理しているため、無視する
 		while(True):
+			# テストコード
+			print(SwitchData.SwitchData().get())
+			
 			print("AutomaticWatering...")
 
 			# 水切れ監視
@@ -67,6 +71,10 @@ class AutomaticWatering(object):
 			# 水やり
 			self.mPumpControl.execute(WATERING_TIME)
 
-			time.sleep(10)
-
+			time.sleep(3)
+			'''
+			self.mSwitchMonitoring.kill()
+			self.mSwitchMonitoring.join()
+			del self.mSwitchMonitoring
+			'''
 		return
