@@ -4,5 +4,5 @@ class LINENotify():
     def __init__(self):
         pass
     
-    def hoge():
+    def execute():
         pass
