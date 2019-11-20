@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+from StateMemory import DBManipulation
 
-class API_StateMemory():
+class API_StateMemory(object):
 	mInstance = None
-	mSwStatus = False
+	mDbCtrl = False
 	def __new__(self):
 		if self.mInstance == None:
 			self.mInstance = super(API_StateMemory, self).__new__(self)
+			self.mDbCtrl = DBManipulation.DBManipulation()
 		return self.mInstance
 
 	################################
