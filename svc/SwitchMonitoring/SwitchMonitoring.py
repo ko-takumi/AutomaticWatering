@@ -41,8 +41,5 @@ class SwitchMonitoring(Task.Task):
 
 			time.sleep(1)
 
-	def func1(self):
-		pass
-
 	def kill(self):
 		self.mIsActive = False

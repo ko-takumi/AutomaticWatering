@@ -34,7 +34,6 @@ class AutomaticWatering(object):
 		self.mRegularContact = RegularContact.RegularContact()
 		self.mRegularContact.start()
 
-		# self.mSwitchMonitoring = SwitchMonitoring.getInstance()
 		self.mSwitchMonitoring = SwitchMonitoring.SwitchMonitoring()
 		self.mSwitchMonitoring.start()
 		return
